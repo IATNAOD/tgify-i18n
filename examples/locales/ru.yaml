@@ -1,2 +1,3 @@
 greeting: Привет ${uppercase(from.first_name)}!
-cart: В вашей корзине ${pluralize(apples, 'яблоко', 'яблокa', 'яблок')}
+cart: В вашей корзине ${pluralize(apples, 'яблоко', 'яблока', 'яблок')}
+checkout: Спасибо

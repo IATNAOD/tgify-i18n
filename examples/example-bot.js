@@ -1,7 +1,7 @@
 const { Tgify, session } = require("@tgify/bot");
 const path = require("path");
 
-const I18n = require("../lib/i18n");
+const { I18n } = require("@tgify/i18n");
 
 // i18n options
 const i18n = new I18n({
@@ -16,41 +16,43 @@ const i18n = new I18n({
 });
 
 const bot = new Tgify(process.env.BOT_TOKEN);
-bot.use(session());
+bot.use(session({ defaultSession: () => ({}) }));
 bot.use(i18n.middleware());
 
 // Start message handler
-bot.start(({ i18n, replyWithHTML }) => replyWithHTML(i18n.t("greeting")));
+bot.start((ctx) => ctx.replyWithHTML(ctx.i18n.t("greeting")));
 
 // Using i18n helpers
-bot.command("help", I18n.reply("greeting"));
+bot.command("help", I18n.reply("greeting", { parse_mode: "HTML" }));
 
 // Set locale to `en`
-bot.command("en", ({ i18n, replyWithHTML }) => {
-  i18n.locale("en-US");
-  return replyWithHTML(i18n.t("greeting"));
+bot.command("en", (ctx) => {
+  ctx.i18n.locale("en-US");
+  return ctx.replyWithHTML(ctx.i18n.t("greeting"));
 });
 
 // Set locale to `ru`
-bot.command("ru", ({ i18n, replyWithHTML }) => {
-  i18n.locale("ru");
-  return replyWithHTML(i18n.t("greeting"));
+bot.command("ru", (ctx) => {
+  ctx.i18n.locale("ru");
+  return ctx.replyWithHTML(ctx.i18n.t("greeting"));
 });
 
 // Add apple to cart
-bot.command("add", ({ session, i18n, reply }) => {
-  session.apples = session.apples || 0;
-  session.apples++;
-  const message = i18n.t("cart", { apples: session.apples });
-  return reply(message);
+bot.command("add", (ctx) => {
+  ctx.session.apples = (ctx.session.apples || 0) + 1;
+  return ctx.reply(ctx.i18n.t("cart", { apples: ctx.session.apples }));
 });
 
-// Add apple to cart
+// Show cart
 bot.command("cart", (ctx) => {
-  const message = ctx.i18n.t("cart", { apples: ctx.session.apples || 0 });
-  return ctx.reply(message);
+  return ctx.reply(ctx.i18n.t("cart", { apples: ctx.session.apples || 0 }));
 });
 
 // Checkout
-bot.command("checkout", ({ reply, i18n }) => reply(i18n.t("checkout")));
-bot.startPolling();
+bot.command("checkout", (ctx) => ctx.reply(ctx.i18n.t("checkout")));
+
+bot.launch();
+
+// Enable graceful stop
+process.once("SIGINT", () => bot.stop("SIGINT"));
+process.once("SIGTERM", () => bot.stop("SIGTERM"));
