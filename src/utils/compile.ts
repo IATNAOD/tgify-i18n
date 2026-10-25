@@ -14,7 +14,7 @@ export const compile = (template: string, defaultContext?: object, ops?: vm.Runn
     try {
       return script.runInNewContext(Object.assign({}, defaultContext, context), options)
     } catch (err: any) {
-      throw new Error(err.toString())
+      throw new Error(err.toString(), { cause: err })
     }
   }
 }

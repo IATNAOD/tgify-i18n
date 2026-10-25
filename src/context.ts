@@ -106,7 +106,7 @@ export class I18nContext<
     for (const key of Object.keys(ctx)) {
       const v = ctx[key];
       if (typeof v === "function") {
-        ctx[key] = (v as Function).bind(this);
+        ctx[key] = (v as (...args: unknown[]) => unknown).bind(this);
       }
     }
 
