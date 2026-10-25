@@ -34,11 +34,10 @@ export type BaseTemplateData = {
 
 type SessionLike = { __language_code?: string };
 
+// only what middleware() reads; must stay assignable from the bot's Context
 export type MinimalCtx = {
   from?: { language_code?: string } | null;
   chat?: unknown;
-  reply?: (text: string, extra?: unknown) => unknown;
-  [k: string]: unknown;
 };
 
 function normalizeLocale(code: string): { full: string; base: string } {
@@ -270,13 +269,14 @@ export class I18n<TemplateData extends Record<string, unknown> & BaseTemplateDat
   }
 
   static match(resourceKey: string, templateData?: Record<string, unknown>) {
-    return (text: string, ctx: any) =>
-      text && ctx && ctx.i18n && text === ctx.i18n.t(resourceKey, templateData) ? [text] : null;
+    return (text: string, ctx: any): RegExpExecArray | null =>
+      text && ctx && ctx.i18n && text === ctx.i18n.t(resourceKey, templateData) ? /^[\s\S]*$/.exec(text) : null;
   }
 
-  static reply(resourceKey: string, extra?: unknown) {
-    return ({ reply, i18n }: { reply: (text: string, extra?: unknown) => unknown; i18n: { t: (k: string) => string } }) =>
-      reply(i18n.t(resourceKey), extra);
+  static reply<Extra>(resourceKey: string, extra?: Extra) {
+    // call reply on ctx itself: context methods rely on `this`
+    return (ctx: { reply(text: string, extra?: Extra): Promise<unknown>; i18n: { t(key: string): string } }) =>
+      ctx.reply(ctx.i18n.t(resourceKey), extra);
   }
 
   static pluralize = pluralize;
