@@ -54,7 +54,6 @@
     "clean": "git clean -fX .eslintcache lib/ typings/"
   },
   "dependencies": {
-    "compile-template": "^0.3.1",
     "debug": "^4.0.1",
     "js-yaml": "^3.6.1"
   },
@@ -72,7 +71,6 @@
     "ava": "^2.2.0",
     "eslint": "^10.0.2",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-ava": "^16.0.0",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^5.5.5",
