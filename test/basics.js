@@ -16,7 +16,7 @@ test("allowMissing false throws", (t) => {
   });
   t.throws(() => {
     i18n.t("en", "greeting");
-  }, "@tgify/i18n: 'en.greeting' not found");
+  }, { message: "@tgify/i18n: 'en.greeting' not found" });
 });
 
 test("package root exports I18n and I18nContext", (t) => {
