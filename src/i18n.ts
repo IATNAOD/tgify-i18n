@@ -3,6 +3,7 @@ import path from 'path'
 import fs from 'fs'
 
 import { compile } from './utils/compile'
+import { normalizeLocale } from './utils/locale'
 import { pluralize } from './pluralize'
 import { I18nContext, type I18nConfig } from './context'
 
@@ -46,11 +47,6 @@ export type MinimalCtx = {
   chat?: unknown
 }
 
-function normalizeLocale(code: string): { full: string; base: string } {
-  const full = code.trim().toLowerCase().replace(/_/g, '-')
-  const base = full.split('-')[0] as string
-  return { full, base }
-}
 
 function isPlainObject(v: unknown): v is Record<string, unknown> {
   return !!v && typeof v === 'object' && !Array.isArray(v)

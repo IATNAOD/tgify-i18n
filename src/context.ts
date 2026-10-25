@@ -1,3 +1,5 @@
+import { normalizeLocale } from './utils/locale'
+
 export type TemplateFn<
   Ctx extends Record<string, unknown> = Record<string, unknown>,
 > = (ctx: Ctx) => string
@@ -57,8 +59,7 @@ export class I18nContext<
   locale(languageCode?: string): string | void {
     if (!languageCode) return this.languageCode
 
-    const code = languageCode.toLowerCase()
-    const shortCode = code.split('-')[0] as string
+    const { full: code, base: shortCode } = normalizeLocale(languageCode)
 
     if (!this.repository[code] && !this.repository[shortCode]) {
       this.languageCode = this.config.defaultLanguage

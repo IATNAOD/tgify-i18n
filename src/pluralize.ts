@@ -1,3 +1,5 @@
+import { normalizeLocale } from './utils/locale'
+
 type PluralRuleKey =
   | 'english'
   | 'french'
@@ -36,9 +38,6 @@ const pluralRules: Record<PluralRuleKey, (n: number) => number> = {
   },
 }
 
-const normalizeLang = (code: string) =>
-  code.trim().toLowerCase().replace(/_/g, '-')
-
 const mapping: Record<PluralRuleKey, readonly string[]> = {
   english: [
     'da',
@@ -67,7 +66,7 @@ const mapping: Record<PluralRuleKey, readonly string[]> = {
 
 for (const ruleKey of Object.keys(mapping) as PluralRuleKey[]) {
   for (const lang of mapping[ruleKey]) {
-    langToRule[normalizeLang(lang)] = ruleKey
+    langToRule[normalizeLocale(lang).full] = ruleKey
   }
 }
 
@@ -109,8 +108,7 @@ export function pluralize(
     contextLanguage(this) ??
     'en'
 
-  const norm = normalizeLang(langCode)
-  const base = norm.split('-')[0] as string
+  const { full: norm, base } = normalizeLocale(langCode)
 
   const ruleKey = langToRule[norm] ?? langToRule[base] ?? 'english'
 

@@ -47,3 +47,12 @@ test("I18n.match matches translated text", (t) => {
   t.is(trigger("Menu", ctx)[0], "Menu");
   t.is(trigger("Other", ctx), null);
 });
+
+test("locale accepts codes with underscore", (t) => {
+  const i18n = new I18n();
+  i18n.loadLocale("en_US", { greeting: "Howdy!" });
+  const ctx = i18n.createContext("ru");
+  ctx.locale("en_US");
+  t.is(ctx.locale(), "en-us");
+  t.is(ctx.t("greeting"), "Howdy!");
+});
