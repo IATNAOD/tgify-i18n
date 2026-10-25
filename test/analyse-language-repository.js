@@ -1,6 +1,6 @@
 const test = require("ava");
 
-const I18n = require("../lib/i18n.js");
+const { I18n } = require("@tgify/i18n");
 
 test("resourceKeys flat", (t) => {
   const i18n = new I18n();
