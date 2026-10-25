@@ -56,11 +56,29 @@ for (const ruleKey of Object.keys(mapping) as PluralRuleKey[]) {
   }
 }
 
-export function pluralize(
-  number: number,
-  forms: readonly Form[],
-  langCode = "en"
-): string {
+function contextLanguage(source: unknown): string | undefined {
+  if (!source || typeof source !== "object") return undefined;
+  const { languageCode } = source as { languageCode?: unknown };
+  return typeof languageCode === "string" ? languageCode : undefined;
+}
+
+/**
+ * Picks the plural form of `number`. Two call styles are supported:
+ * - `pluralize(n, 'apple', 'apples')` — forms as arguments, like in telegraf-i18n;
+ * - `pluralize(n, ['apple', 'apples'], 'en')` — forms as an array with an explicit language.
+ *
+ * Without an explicit language the locale of `this` is used: template functions are bound
+ * to the `I18nContext`, so inside templates `pluralize` follows the current locale.
+ */
+export function pluralize(this: unknown, number: number, forms: readonly Form[], langCode?: string): string;
+export function pluralize(this: unknown, number: number, ...forms: Form[]): string;
+export function pluralize(this: unknown, number: number, ...args: unknown[]): string {
+  const [first, second] = args;
+  const isArrayForm = Array.isArray(first);
+  const forms = (isArrayForm ? first : args) as readonly Form[];
+  const langCode =
+    (isArrayForm && typeof second === "string" ? second : undefined) ?? contextLanguage(this) ?? "en";
+
   const norm = normalizeLang(langCode);
   const base = norm.split("-")[0] as string;
 
