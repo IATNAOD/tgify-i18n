@@ -3,7 +3,7 @@
 
 # i18n for @tgify/bot
 
-Internationalization middleware for [@tgify/bot](https://github.com/@tgify/bot).
+Internationalization middleware for [@tgify/bot](https://github.com/IATNAOD/tgify-bot).
 
 ## Installation
 
@@ -14,8 +14,9 @@ $ npm install @tgify/i18n
 ## Example
 
 ```js
+const path = require('path')
 const { Tgify } = require('@tgify/bot')
-const TgifyI18n = require('@tgify/i18n')
+const { I18n } = require('@tgify/i18n')
 
 /* 
 yaml and json are ok
@@ -31,7 +32,7 @@ Example directory structure:
 const bot = new Tgify(process.env.BOT_TOKEN)
 
 // @tgify/i18n can save current locale setting into session.
-const i18n = new TgifyI18n({
+const i18n = new I18n({
   defaultLanguageOnMissing: true, // implies allowMissing = true
   directory: path.resolve(__dirname, 'locales'),
 })
@@ -49,4 +50,4 @@ bot.start((ctx) => {
 bot.launch()
 ```
 
-See full [example](/examples)
+See full [example](examples/example-bot.js)
