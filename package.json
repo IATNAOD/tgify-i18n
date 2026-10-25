@@ -43,6 +43,7 @@
   ],
   "scripts": {
     "prepare": "npm run --silent build",
+    "prebuild": "tsx build/clean.ts",
     "build": "tsc && npm run expose",
     "expose": "tsx build/expose.ts context i18n pluralize",
     "pretest": "npm run build",
