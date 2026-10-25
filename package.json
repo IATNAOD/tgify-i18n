@@ -81,37 +81,9 @@
     "typescript": "^5.9.3"
   },
   "exports": {
-    "./types": {
-      "types": "./types.d.ts",
-      "default": "./types.js"
-    },
-    "./scenes": {
-      "types": "./scenes.d.ts",
-      "default": "./scenes.js"
-    },
-    "./filters": {
-      "types": "./filters.d.ts",
-      "default": "./filters.js"
-    },
-    "./format": {
-      "types": "./format.d.ts",
-      "default": "./format.js"
-    },
-    "./future": {
-      "types": "./future.d.ts",
-      "default": "./future.js"
-    },
-    "./utils": {
-      "types": "./utils.d.ts",
-      "default": "./utils.js"
-    },
-    "./markup": {
-      "types": "./markup.d.ts",
-      "default": "./markup.js"
-    },
-    "./session": {
-      "types": "./session.d.ts",
-      "default": "./session.js"
+    ".": {
+      "types": "./typings/index.d.ts",
+      "default": "./lib/index.js"
     },
     "./context": {
       "types": "./context.d.ts",
